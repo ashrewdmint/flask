@@ -16,6 +16,10 @@ module Nameable
   def name_matches?(string)
     @name == string.to_s
   end
+  
+  def self.to_underscore_case(string)
+    string.to_s.split(/(?=[A-Z0-9])/).join('_').downcase
+  end
 end
 
 class Responder
@@ -121,6 +125,7 @@ class Room < ResponderCollection
     @responders = []
     @parent = parent if parent.is_a?(Hallway)
     @visited = false
+    self.name = Nameable.to_underscore_case(self.class)
     
     default_responders
     setup
