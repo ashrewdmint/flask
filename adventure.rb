@@ -77,6 +77,17 @@ class ResponderCollection
     @responders.pop
   end
   
+  def [](name)
+    @responders.each do |r|
+      return r if r.name_matches? name
+    end
+    nil
+  end
+  
+  def find(name)
+    self[name]
+  end
+  
   def delete_at(*names)
     names.each do |name|
       @responders = @responders.delete_if do |r|
