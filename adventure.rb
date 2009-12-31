@@ -30,7 +30,7 @@ class Responder
     unless var.is_a?(Regexp)
       var = '.*' if var == '*'
       var = "^#{var}$" unless var =~ /^\^|\$$/
-      var = Regexp.new(var)
+      var = Regexp.new(var, true)
     end
     var
   end
@@ -115,16 +115,24 @@ class ResponderCollection
 end
 
 class Room < ResponderCollection
-  attr_reader :parent, :description, :exits
+  attr_reader :parent, :description, :exits, :inventory
   
   def initialize(parent = nil)
     @responders = []
+    @inventory = Inventory.new
     @parent = parent if parent.is_a?(Hallway)
     @visited = false
     self.name = Nameable.to_underscore_case(self.class)
     
     default_responders
+    create_items
     setup
+  end
+  
+  def create_items
+  end
+  
+  def after_give
   end
   
   def default_responders
@@ -166,6 +174,22 @@ class Room < ResponderCollection
     elsif block
       listen trigger do
         block.call
+      end
+    end
+  end
+  
+  def new_item(name, description, take_message)
+    inventory << Item.new(name, description, take_message)
+    item = inventory[name]
+    name = item.name
+    
+    listen "(get|take) #{name}" do
+      if inventory[name]
+        inventory.give(name, parent.player.inventory)
+        after_give(item)
+        item.take_message
+      else
+        "You already took that."
       end
     end
   end
@@ -267,12 +291,13 @@ class Adventure < Hallway
 end
 
 class Item
-  attr_reader :name, :description
+  attr_reader :name, :description, :take_message
   include Nameable
   
-  def initialize(name, description)
+  def initialize(name, description, take_message)
     self.name = name.to_s
     @description = description
+    @take_message = take_message
   end
 end
 
