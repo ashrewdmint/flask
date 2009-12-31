@@ -14,7 +14,7 @@ module Nameable
   end
   
   def name_matches?(string)
-    @name == string.to_s
+    @name.downcase == string.to_s.downcase
   end
   
   def self.to_underscore_case(string)
