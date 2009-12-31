@@ -271,7 +271,7 @@ class Item
   include Nameable
   
   def initialize(name, description)
-    @name = name
+    self.name = name.to_s
     @description = description
   end
 end
@@ -324,9 +324,7 @@ class Inventory
   def show
     return false if @items.length == 0
     @items.each do |item|
-      puts
-      puts item.name
-      puts item.description
+      puts "#{item.name}: #{item.description}"
     end
   end
 end
