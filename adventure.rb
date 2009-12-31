@@ -115,7 +115,7 @@ class ResponderCollection
 end
 
 class Room < ResponderCollection
-  attr_reader :description, :exits
+  attr_reader :parent, :description, :exits
   
   def initialize(parent = nil)
     @responders = []
@@ -129,11 +129,11 @@ class Room < ResponderCollection
   
   def default_responders
     listen 'look' do
-      puts @description
+      @description
     end
     
     listen 'exits' do
-      puts @exits
+      @exits
     end
   end
   
@@ -145,7 +145,7 @@ class Room < ResponderCollection
   
   def enter
     unless @visited or ! @intro
-      @intro
+      puts @intro
     end
     
     respond :look
@@ -203,7 +203,7 @@ class Hallway
     
     unless @current_room = self[name]
       self << name
-      @current_room = @rooms.first
+      @current_room = @rooms.last
     end
     
     @current_room.enter
@@ -223,7 +223,7 @@ class Adventure < Hallway
     
     @first = ResponderCollection.new
     @last = ResponderCollection.new
-    @player = nil
+    @player = Player.new
     @in_progress = true
     
     default_responders
@@ -250,15 +250,6 @@ class Adventure < Hallway
 
   def stop
     @in_progress = false
-  end
-  
-  def room
-    @rooms[@room]
-  end
-  
-  def room=(constant_name)
-    constant_name.to_s.split('_').collection { |word| word.capitalize }.join
-    @current_room = Kernel.const_get(constant).new
   end
   
   def in_progress?
