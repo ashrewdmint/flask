@@ -11,9 +11,13 @@ class Responder
   end
 
   def initialize(trigger, &block)
-    @name = trigger.is_a?(Regexp) ? trigger.inspect.to_sym : trigger.to_s.to_sym
+    @name = trigger.is_a?(Regexp) ? trigger.inspect : trigger.to_s
     @trigger = Responder.regexify(trigger)
     @block = block
+  end
+  
+  def matches?(string)
+    string.to_s == @name
   end
 
   def respond(input)
@@ -34,7 +38,10 @@ class ResponderCollection
 
   def initialize(name = nil, *responders)
     @responders = []
-    @name = name and name.to_s.length > 0 ? name.to_s.to_sym : nil
+    
+    if name and name.to_s.length > 0
+      @name = name.to_s
+    end
   
     if responders.length > 1
       @responders = responders
@@ -58,7 +65,7 @@ class ResponderCollection
   def delete_at(*names)
     names.each do |name|
       @responders = @responders.delete_if do |r|
-        r.name == name.to_sym
+        r.matches? name
       end
     end
   end
@@ -78,6 +85,10 @@ class ResponderCollection
       return true if responder.respond(input)
     end
     false
+  end
+  
+  def matches?(string)
+    string.to_s == @name
   end
 end
 
