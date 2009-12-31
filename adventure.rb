@@ -11,8 +11,7 @@ class Responder
   end
 
   def initialize(trigger, &block)
-    name = trigger.is_a?(Regexp) ? trigger.inspect.to_sym : trigger.to_sym
-    @name = name.downcase.gsub(/[^a-z0-9]/, '')
+    @name = trigger.is_a?(Regexp) ? trigger.inspect.to_sym : trigger.to_s.to_sym
     @trigger = Responder.regexify(trigger)
     @block = block
   end
@@ -31,10 +30,11 @@ class Responder
 end
 
 class ResponderCollection
-  attr_reader :responders
+  attr_reader :name, :responders
 
-  def initialize(*responders)
+  def initialize(name = nil, *responders)
     @responders = []
+    @name = name and name.to_s.length > 0 ? name.to_s.to_sym : nil
   
     if responders.length > 1
       @responders = responders
@@ -42,7 +42,7 @@ class ResponderCollection
   end
 
   def <<(responder)
-    if responder.is_a?(Responder)
+    if responder.is_a?(Responder) or responder.is_a?(ResponderCollection)
       @responders << responder
     end
   end
@@ -63,8 +63,14 @@ class ResponderCollection
     end
   end
 
-  def listen(trigger, &block)
+  def listen(trigger = nil, &block)
     self.<< Responder.new(trigger, &block)
+  end
+  
+  def collection(name, &block)
+    collection = ResponderCollection.new(name)
+    block.call(collection)
+    self << collection
   end
 
   def respond(input)
@@ -79,8 +85,7 @@ class Room < ResponderCollection
   attr_reader :description, :exits
   
   def initialize(parent = nil)
-    super
-    
+    @responders = []
     @parent = parent if parent.is_a?(Hallway)
     @visited = false
     
