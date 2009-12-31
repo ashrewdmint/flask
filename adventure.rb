@@ -179,15 +179,12 @@ class Hallway
   attr_reader :rooms, :current_room
   
   def initialize()
-    @rooms = {}
+    @rooms = []
   end
   
   def <<(sym)
-    return unless sym.is_a?(Symbol)
     room = Hallway.sym_to_class(sym).new(self)
-    if (room.is_a?(Room))
-      @rooms[sym]= room
-    end
+    @rooms << room if room.is_a?(Room)
   end
   
   def push(room)
@@ -195,10 +192,10 @@ class Hallway
   end
   
   def [](name)
-    @rooms.each_pair do |key, value|
-      return value if key == name
+    @rooms.each do |r|
+      return r if r.name_matches? name
     end
-    false
+    nil
   end
   
   def find(name)
@@ -207,12 +204,16 @@ class Hallway
   
   def enter(name)
     @current_room.leave if @current_room
-    @current_room = find(name) ? find(name) : self << name
+    
+    unless @current_room = self[name]
+      self << name
+      @current_room = @rooms.first
+    end
+    
     @current_room.enter
   end
   
   def self.sym_to_class(sym)
-    return sym unless sym.is_a?(Symbol)
     constant = sym.to_s.split('_').collect { |word| word.capitalize }.join
     Kernel.const_get(constant)
   end
