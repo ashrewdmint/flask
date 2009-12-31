@@ -58,13 +58,9 @@ class ResponderCollection
   attr_reader :name, :responders
   include Nameable
 
-  def initialize(name = nil, *responders)
+  def initialize(name = nil)
     @responders = []
     self.name = name
-  
-    if responders.length > 1
-      @responders = responders
-    end
   end
 
   def <<(responder)
