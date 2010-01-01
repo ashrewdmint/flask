@@ -117,7 +117,7 @@ end
 class Room < ResponderCollection
   attr_reader :parent, :description, :exits, :inventory
   
-  def initialize(parent = nil)
+  def initialize(parent)
     @responders = []
     @inventory = Inventory.new
     @parent = parent if parent.is_a?(Hallway)
@@ -360,5 +360,13 @@ class Player
   
   def initialize
     @inventory = Inventory.new
+  end
+  
+  def has?(item)
+    !! inventory[item]
+  end
+  
+  def give(name, inventory)
+    inventory.give(name, inventory)
   end
 end
