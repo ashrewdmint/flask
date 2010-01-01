@@ -235,7 +235,7 @@ class Hallway
   
   def self.sym_to_class(sym)
     constant = sym.to_s.split('_').collect { |word| word.capitalize }.join
-    Kernel.const_get(constant)
+    Object.const_get(constant)
   end
 end
 
