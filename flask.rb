@@ -1,0 +1,6 @@
+require 'flask/mixin'
+require 'flask/responder'
+require 'flask/inventory'
+require 'flask/room'
+require 'flask/player'
+require 'flask/adventure'
