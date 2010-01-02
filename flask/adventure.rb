@@ -12,16 +12,17 @@ module Flask
       @in_progress = true
 
       default_responders
+      create_responders
       setup
     end
+
+    def setup; end
+    def create_responders; end
 
     def default_responders
       @last.listen '*' do |input|
         "I don't know how to respond to '#{input}'"
       end
-    end
-
-    def setup
     end
 
     def respond(input)
