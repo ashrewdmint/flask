@@ -115,53 +115,57 @@ class ResponderCollection
 end
 
 class Room < ResponderCollection
-  attr_reader :parent, :description, :exits, :inventory
+  attr_reader :parent, :data, :inventory
+  class << self; attr_reader :data end
   
   def initialize(parent)
     @responders = []
-    @inventory = Inventory.new
-    @parent = parent if parent.is_a?(Hallway)
-    @visited = false
-    self.name = Nameable.to_underscore_case(self.class)
+    @inventory  = Inventory.new
+    @parent     = parent if parent.is_a?(Hallway)
+    @data       = self.class.data || {}
+    @visited    = false
+    self.name   = Nameable.to_underscore_case(self.class)
     
+    before_setup
     default_responders
     create_items
+    create_responders
     setup
   end
   
-  def create_items
-  end
-  
-  def after_give
-  end
+  def before_setup; end
+  def create_items; end
+  def create_responders; end
+  def setup; end
   
   def default_responders
     listen 'look' do
-      @description
+      description
     end
-    
+
     listen 'exits' do
-      @exits
+      exits
     end
   end
   
-  def setup
-    @intro = 'This will run the first time'
-    @description = 'Room description'
-    @exits = 'There is no way out of here'
+  def description
+    data[:description]
+  end
+  
+  def exits
+    data[:exits]
   end
   
   def enter
-    unless @visited or ! @intro
-      puts @intro
+    unless @visited or ! data[:intro]
+      puts data[:intro]
     end
     
     respond :look
     @visited = true
   end
   
-  def leave
-  end
+  def leave; end
   
   def go(location, room = nil, &block)
     return unless @parent
@@ -186,7 +190,6 @@ class Room < ResponderCollection
     listen "(get|take) #{name}" do
       if inventory[name]
         inventory.give(name, parent.player.inventory)
-        after_give(item)
         item.take_message
       else
         "You already took that."
