@@ -56,12 +56,20 @@ module Flask
           end
         end
         
-        # Create class
-        room_class = Class.new(Room) do
+        block = Proc.new do
           @data = data
         end
         
-        Object.const_set(name, room_class)
+        # Create class
+        room_class = Class.new(Room, &block)
+        
+        # If the class already exists, add stuff to it
+        if Object.const_defined?(name.to_sym)
+          Object.const_get(name).class_eval(&block)
+        else
+          # If not, create the class
+          Object.const_set(name, room_class)
+        end
       end
     end
   end
