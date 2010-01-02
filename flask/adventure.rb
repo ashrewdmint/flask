@@ -56,11 +56,7 @@ module Flask
   private
     
     def load_config
-      if path = self.class.config_path
-        Flask.load_config(path)
-      else
-        Flask.load_config
-      end
+      Flask.load(self.class.config_path)
     end
   end
   
