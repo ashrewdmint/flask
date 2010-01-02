@@ -18,12 +18,16 @@ module Flask
       create_responders
       setup
     end
+    
+  private
   
     def before_setup; end
     def create_items; end
     def create_responders; end
     def setup; end
-  
+    
+  public
+    
     def default_responders
       listen 'look' do
         description
@@ -52,6 +56,10 @@ module Flask
     end
   
     def leave; end
+    
+    def travel_to(name)
+      parent.enter(name)
+    end
   
     def go(location, room = nil, &block)
       return unless @parent
