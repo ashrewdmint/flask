@@ -1,9 +1,11 @@
 module Flask
-    
+  
+  # A simple game object.
   class Item
     attr_reader :name, :description, :take_message
     include Nameable
-
+    
+    # "take_message" is shown to the user when the player gets the item.
     def initialize(name, description, take_message)
       self.name = name.to_s
       @description = description
@@ -11,6 +13,7 @@ module Flask
     end
   end
   
+  # A group of Items
   class Inventory
     attr_reader :items
 
@@ -48,14 +51,16 @@ module Flask
         end
       end
     end
-
+    
+    # Removes the item from this inventory and adds it to another inventory
     def give(name, inventory)
       if item = self[name] and inventory.is_a?(Inventory)
         delete_at(name)
         inventory << item
       end
     end
-
+    
+    # Prints the inventory out
     def show
       return false if @items.length == 0
       @items.each do |item|

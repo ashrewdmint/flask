@@ -1,5 +1,7 @@
 module Flask
   
+  # A block of code stored alongside a regex.
+  
   class Responder
     attr_reader :name, :trigger, :block
     include Nameable
@@ -31,7 +33,9 @@ module Flask
       end
     end
   end
-
+  
+  # A group of responders.
+  
   class ResponderCollection
     attr_reader :name, :responders
     include Nameable

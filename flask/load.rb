@@ -6,13 +6,14 @@ module Flask
     Load.all(*args)
   end
   
+  # Loads config files.
   class Load
     ROOM_RESERVED_KEYS = %w(exits items)
     ROOM_DIRECTIONS = %w(north east south west)
     
     @path = 'config/'
     
-    def self.all(mod, path = nil)
+    def self.all(path = nil)
       @path = path if path
       items
       rooms
