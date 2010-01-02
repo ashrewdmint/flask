@@ -2,7 +2,7 @@ module Flask
   
   class Room < ResponderCollection
     attr_reader :parent, :data, :inventory
-    class << self; attr_reader :data end
+    class << self; attr_accessor :data end
   
     def initialize(parent)
       @responders = []
@@ -11,7 +11,7 @@ module Flask
       @data       = self.class.data || {}
       @visited    = false
       self.name   = Nameable.to_underscore_case(self.class)
-    
+      
       before_setup
       default_responders
       create_items

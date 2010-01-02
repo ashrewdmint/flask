@@ -37,7 +37,7 @@ module Flask
         # Collect data
         hash.each_pair do |key, value|
           if ROOM_RESERVED_KEYS.include? key
-            reserved[key] = value
+            reserved[key.downcase.to_sym] = value
           else
             data[key.downcase.to_sym] = value.chomp
           end
@@ -57,20 +57,16 @@ module Flask
           end
         end
         
-        block = Proc.new do
-          @data = data
-        end
-        
-        # Create class
-        room_class = Class.new(Room, &block)
-        
-        # If the class already exists, add stuff to it
-        if Object.const_defined?(name.to_sym)
-          Object.const_get(name).class_eval(&block)
-        else
-          # If not, create the class
+        # If the room class does not exist, create it
+        unless Object.const_defined?(name.to_sym)
+          room_class = Class.new(Room) do; end
           Object.const_set(name, room_class)
+        else
+          room_class = Object.const_get(name)
         end
+        
+        # Set data
+        room_class.data = data
       end
     end
   end
