@@ -1,0 +1,23 @@
+Bauble:
+  description: > A shiny, sparkly Bauble. Oh how it glitters!
+  take_message: >
+    You pick up the bauble and place it into your bag.
+    What a treasure it is, indeed!
+  use_message: Baubles are kinda for looks only.
+
+Flashlight:
+  description: A sturdy-looking flashlight.
+  take_message: >
+    You pick up the flashlight and attempt to turn it on,
+    but it doesn't work. Maybe it needs batteries?
+  use_message: >
+    It doesn't appear to work. Are you sure it has batteries?
+  check_batteries: >
+    You open the battery compartment and look inside. Empty.
+
+Batteries:
+  description: A pair of AA batteries.
+  take_message: Batteries acquired.
+  use_message: >
+    You place the batteries inside of your flashlight.
+    It works now! Just don't shine it in anyone's eyes.
