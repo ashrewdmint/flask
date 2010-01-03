@@ -32,6 +32,14 @@ module Flask
       last.listen '*' do |input|
         "I don't know how to respond to '#{input}'"
       end
+      
+      last.listen 'go .*' do
+        "You can't go there."
+      end
+      
+      last.listen '(take|get) .*' do
+        "You can't take that."
+      end
     end
     
     # Takes the input and tries to get a response from the first, current room, or last ResponderCollections.
