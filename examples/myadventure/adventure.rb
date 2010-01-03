@@ -59,7 +59,7 @@ module MyAdventure::Rooms
           first.pop
       
           puts data[:success].gsub(/#name/, name)
-          parent.enter :start_room
+          parent.enter :start
         else
           data[:error]
         end
