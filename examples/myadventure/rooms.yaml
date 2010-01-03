@@ -37,5 +37,23 @@ StartRoom:
   items:
     - flashlight
   exits:
-    south: start_hallway
-    trap_door: { two_way: false, room: basement_entrance }
+    south: StartHallwayRoom
+    trap_door: { two_way: false, room: BasementRoom }
+
+StartHallwayRoom:
+  intro: You open the door and step into a hallway.
+  description: >
+    The hallway continues south. To the north lies the room you woke
+    up in. It's musty in here.
+  exits:
+    south: EndHallwayRoom
+
+EndHallwayRoom:
+  description: >
+    The hallway ends here. There is a large, dimly-lit door to the north.
+  open_locked: The door is locked.
+  open_unlocked: The door creaks open.
+
+BasementRoom:
+  intro: You fell into the basement!
+  description: There's no way out of here. Good going.
