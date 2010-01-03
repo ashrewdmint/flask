@@ -39,17 +39,15 @@ module Flask
     def initialize
       @items = []
     end
-
-    def <<(item)
-      if item.is_a?(Item)
-        @items << item
-      else
-        false
+    
+    # Turns a name into a class instance and adds it to itself.
+    # Or, if an Item instance is supplied, it just adds it.
+    
+    def <<(name)
+      unless item.is_a?(Item)
+        item = Load.get_class(name).new
       end
-    end
-
-    def push(item)
-      self << item
+      @items << item if item.is_a?(Item)
     end
 
     def [](name)
@@ -57,10 +55,6 @@ module Flask
         return i if i.name_matches? name
       end
       nil
-    end
-
-    def find(name)
-      self[name]
     end
 
     def delete_at(*names)
@@ -72,6 +66,7 @@ module Flask
     end
     
     # Removes the item from this inventory and adds it to another inventory
+    
     def give(name, inventory)
       if item = self[name] and inventory.is_a?(Inventory)
         delete_at(name)
@@ -80,6 +75,7 @@ module Flask
     end
     
     # Prints the inventory out
+    
     def show
       return false if @items.length == 0
       @items.each do |item|
