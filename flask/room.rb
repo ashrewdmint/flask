@@ -120,7 +120,7 @@ module Flask
     end
     
     def new_door(*args)
-      self.new_door(*args)
+      self.class.new_door(*args)
     end
 
     def self.door_at(direction)
@@ -131,7 +131,7 @@ module Flask
     end
     
     def door_at(*args)
-      self.door_at(*args)
+      self.class.door_at(*args)
     end
   end
   
