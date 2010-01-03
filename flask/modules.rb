@@ -32,4 +32,14 @@ module Flask
     end
   end
   
+  module Inflector
+    def to_camel_case(string)
+      string.to_s.split(/(?=_)/).
+    end
+    
+    def to_underscores(string)
+      string.to_s.split(/(?=[A-Z0-9])/).join('_').downcase
+    end
+  end
+  
 end
