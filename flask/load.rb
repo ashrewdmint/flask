@@ -59,7 +59,7 @@ module Flask
           hash[sym] = value
         end
         
-        item_class = get_or_create_class(name, Item, 'Items')
+        item_class = item_class(name)
         item_class.data = hash
       end
     end
@@ -82,7 +82,7 @@ module Flask
         end
         
         # If the room class does not exist, create it
-        room_class = get_or_create_class(name, Room, 'Rooms')
+        room_class = room_class(name)
         
         # Set data
         room_class.data = data
@@ -122,7 +122,7 @@ module Flask
     def self.get_or_create_class(name, superclass = nil, mod = nil)
       name = Inflector.camelize(name)
       
-      unless context(mod).const_defined?(name.to_sym)
+      unless context(mod).const_defined?(name)
         room_class = if superclass
           Class.new(superclass) {}
         else
@@ -135,11 +135,11 @@ module Flask
     end
     
     def self.room_class(name)
-      context('Rooms').const_get(Inflector.camelize(name))
+      get_or_create_class(name, Room, 'Rooms')
     end
     
     def self.item_class(name)
-      context('Items').const_get(Inflector.camelize(name))
+      get_or_create_class(name, Item, 'Items')
     end
   end
   
