@@ -4,7 +4,7 @@ class MyAdventure < Flask::Adventure
   @config_path = File.dirname(__FILE__) + '/'
   
   def setup
-    enter :welcome_room
+    enter :welcome
   end
   
   def create_responders
@@ -26,28 +26,28 @@ class MyAdventure < Flask::Adventure
     end
     
     first.listen 'help' do
-      enter :help_room
+      enter :help
     end
   end
 end
 
 module MyAdventure::Rooms
   
-  class HelpRoom < Flask::Room
+  class Help < Flask::Room
     def enter
       respond :look
-      travel_to :start_room
+      travel_to :start
     end
   end
 
-  class WelcomeRoom < Flask::Room
+  class Welcome < Flask::Room
     def enter
       respond :look
-      travel_to :name_room
+      travel_to :name
     end
   end
 
-  class NameRoom < Flask::Room
+  class Name < Flask::Room
     def create_responders
       first = parent.first
   

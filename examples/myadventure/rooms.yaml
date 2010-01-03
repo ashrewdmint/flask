@@ -1,4 +1,4 @@
-HelpRoom:
+Help:
   description: >
     Type HELP, INFO, INVENTORY, or QUIT. Commands are not case-sensitive.
     
@@ -17,17 +17,17 @@ HelpRoom:
     
     If all else fails, be creative and use your imaginiation.
 
-WelcomeRoom:
+Welcome:
   description: >
     Welcome to the the game! You can type HELP, INVENTORY, or QUIT.
     Commands are not case-sensitive.
 
-NameRoom:
+Name:
   description: What is your name?
   success: 'Hello, #name.'
   error: Please type your name.
     
-StartRoom:
+Start:
   intro: You awake slowly...
   description: You can't see much here. It's pitch black.
   description_with_flashlight: >
@@ -35,25 +35,25 @@ StartRoom:
     a few furnishings: a chair and desk, a bed, a dresser,
     and a closed window.
   items:
-    - FlashlightItem
+    - Flashlight
   exits:
-    south: StartHallwayRoom
+    south: StartHallway
     trap_door: { two_way: false, room: BasementRoom }
 
-StartHallwayRoom:
+StartHallway:
   intro: You open the door and step into a hallway.
   description: >
     The hallway continues south. To the north lies the room you woke
     up in. It's musty in here.
   exits:
-    south: EndHallwayRoom
+    south: EndHallway
 
-EndHallwayRoom:
+EndHallway:
   description: >
-    The hallway ends here. There is a large, dimly-lit door to the north.
+    The hallway ends here. There is a large, dimly-lit door to the south.
   open_locked: The door is locked.
   open_unlocked: The door creaks open.
 
-BasementRoom:
+Basement:
   intro: You fell into the basement!
   description: There's no way out of here. Good going.

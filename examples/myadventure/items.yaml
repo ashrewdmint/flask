@@ -1,4 +1,4 @@
-FlashlightItem:
+Flashlight:
   description: A sturdy-looking flashlight.
   take_message: >
     You pick up the flashlight and attempt to turn it on,
@@ -8,7 +8,7 @@ FlashlightItem:
   check_batteries: >
     You open the battery compartment and look inside. Empty.
 
-BatteriesItem:
+Batteries:
   description: A pair of AA batteries.
   take_message: Batteries acquired.
   use_message: >
