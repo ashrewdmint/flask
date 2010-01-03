@@ -33,7 +33,7 @@ module Flask
       @inventory  = Inventory.new
       @parent     = parent if parent.is_a?(Hallway)
       @visited    = false
-      self.name   = Nameable.to_underscore_case(self.class)
+      self.name   = Inflector.underscore(self.class)
       
       before_setup
       default_responders

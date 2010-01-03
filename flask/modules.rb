@@ -26,20 +26,18 @@ module Flask
     def name_matches?(string)
       @name.downcase == string.to_s.downcase
     end
-
-    def self.to_underscore_case(string)
-      string.to_s.split(/(?=[A-Z0-9])/).join('_').downcase
-    end
   end
   
   module Inflector
-    def to_camel_case(string)
-      string.to_s.split(/(?=_)/).
+    def self.camelize(string)
+      split = string.to_s.split(/_/)
+      split.collect! {|word| word.capitalize} if split.length > 1
+      split.join
     end
     
-    def to_underscores(string)
+    def self.underscore(string)
       string.to_s.split(/(?=[A-Z0-9])/).join('_').downcase
-    end
+    end 
   end
   
 end
