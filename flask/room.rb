@@ -68,7 +68,7 @@ module Flask
     end
   
     def exits
-      self.class.exits
+      self.class.exits.join(',')
     end
   
     def enter
