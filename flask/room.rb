@@ -51,8 +51,6 @@ module Flask
     def create_responders; end
     def setup; end
     
-  public
-    
     def default_responders
       listen 'look' do
         description
@@ -61,7 +59,19 @@ module Flask
       listen 'exits' do
         exits
       end
+      
+      listen('(go )?.+', :go) do |input|
+        direction = input.gsub(/^go\s+/, '')
+      
+        if new_room = door_at(direction)
+          travel_to(new_room)
+        else
+          :pass_through
+        end
+      end
     end
+    
+  public
   
     def description
       data[:description]
