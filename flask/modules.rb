@@ -32,7 +32,7 @@ module Flask
     def self.camelize(string)
       split = string.to_s.split(/_|\s+/)
       split.collect! {|word| word.capitalize} if split.length > 1
-      split.join
+      string = split.join.gsub(/^./) {|first| first.capitalize }
     end
     
     def self.underscore(string)
