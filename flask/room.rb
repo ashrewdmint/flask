@@ -17,8 +17,8 @@ module Flask
     end
     
     def self.reverse_direction(direction)
-      directions = {'north' => 'south', 'west' => 'east'}
-      directions[direction] || directions.invert[direction]
+      compass = {'north' => 'south', 'west' => 'east'}
+      compass[direction] || compass.invert[direction]
     end
   end
   
@@ -68,7 +68,7 @@ module Flask
     end
   
     def exits
-      data[:exits]
+      self.class.exits
     end
   
     def enter
@@ -167,6 +167,14 @@ module Flask
     
     def door_at(*args)
       self.class.door_at(*args)
+    end
+    
+    # Returns an array of exits
+
+    def self.exits
+      return data[:exits] if data[:exits]
+      exits = doors
+      exits.collect {|door| door.direction.capitalize }
     end
   end
   
