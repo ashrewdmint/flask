@@ -9,8 +9,8 @@ module Flask
       @rooms = []
     end
 
-    def <<(sym)
-      room = Hallway.sym_to_class(sym).new(self)
+    def <<(name)
+      room = Load.get_class(name).new(self)
       @rooms << room if room.is_a?(Room)
     end
 
@@ -23,18 +23,14 @@ module Flask
 
     def enter(name)
       @current_room.leave if @current_room
-  
+      name = Inflector.underscore(name)
+      
       unless @current_room = self[name]
         self << name
         @current_room = @rooms.last
       end
   
       @current_room.enter
-    end
-
-    def self.sym_to_class(sym)
-      constant = sym.to_s.split('_').collect { |word| word.capitalize }.join
-      Object.const_get(constant)
     end
   end
   

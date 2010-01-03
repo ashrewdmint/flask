@@ -93,6 +93,11 @@ module Flask
         Object.const_get(name)
       end
     end
+    
+    def self.get_class(name)
+      name = Inflector.camelize(name).to_sym
+      Object.const_get(name.to_sym)
+    end
   end
   
 end
