@@ -21,12 +21,25 @@ module Flask
     
   private
     
+    # Loads Item classes as defined in items.yaml
+    
     def self.items
       items = YAML.load_file("#{@path}items.yaml")
       items.each_pair do |name, hash|
-        #puts name
+        
+        # Turn string names into lowercase symbols
+        hash.each_pair do |key, value|
+          hash.delete(key)
+          sym = key.to_s.downcase.to_sym
+          hash[sym] = value
+        end
+        
+        item_class = get_or_create_class(name, Item)
+        item_class.data = hash        
       end
     end
+    
+    # Loads Room classes as defined in rooms.yaml
     
     def self.rooms
       items = YAML.load_file("#{@path}rooms.yaml")

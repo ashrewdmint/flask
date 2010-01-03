@@ -1,19 +1,38 @@
 module Flask
   
-  # A simple game object.
+  # A game item. Extend this to create different types of items
+  # such as "FlashlightItem" or "BaubleItem".
+  
   class Item
-    attr_reader :name, :description, :take_message
     include Nameable
     
-    # "take_message" is shown to the user when the player gets the item.
-    def initialize(name, description, take_message)
-      self.name = name.to_s
-      @description = description
-      @take_message = take_message
+    def initialize
+      self.name = self.class
+    end
+    
+    def description
+      data[:description]
+    end
+    
+    def take_message
+      data[:take_message]
+    end
+    
+    def data
+      self.class.data
+    end
+    
+    def self.data
+      @data || {}
+    end
+    
+    def self.data=(hash)
+      @data = hash if hash.is_a?(Hash)
     end
   end
   
-  # A group of Items
+  # A group of Items. Room and Player both posess an Inventory.
+  
   class Inventory
     attr_reader :items
 
