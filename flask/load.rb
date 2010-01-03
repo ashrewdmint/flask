@@ -37,7 +37,7 @@ module Flask
         # Collect data
         hash.each_pair do |key, value|
           if ROOM_RESERVED_KEYS.include? key
-            reserved[key.downcase.to_sym] = value
+            reserved[key.downcase] = value
           else
             data[key.downcase.to_sym] = value.chomp
           end
@@ -50,23 +50,41 @@ module Flask
           end
         end
         
-        # Add exits
-        if exits = reserved['exits']
-          exits.each_pair do |direction, info|
-            # Do something with the exit
-          end
-        end
-        
         # If the room class does not exist, create it
-        unless Object.const_defined?(name.to_sym)
-          room_class = Class.new(Room) do; end
-          Object.const_set(name, room_class)
-        else
-          room_class = Object.const_get(name)
-        end
+        room_class = find_or_create_class(name, Room)
         
         # Set data
         room_class.data = data
+        
+        # Add exits
+        if exits = reserved['exits']
+          exits.each_pair do |direction, details|
+            if details.is_a?(String)
+              destination_room = details
+              two_way = true
+            else
+              destination_room = details['room']
+              two_way = details['two_way']
+            end
+            
+            return unless destination_room
+            room_class.new_door(direction, destination_room)
+          end
+        end
+      end
+    end
+    
+    # Find a class, or create it if it does not exist
+    def self.find_or_create_class(name, superclass = nil)
+      unless Object.const_defined?(name.to_sym)
+        room_class = if superclass
+          Class.new(superclass) do; end
+        else
+          Class.new do; end
+        end
+        Object.const_set(name, room_class)
+      else
+        Object.const_get(name)
       end
     end
   end
