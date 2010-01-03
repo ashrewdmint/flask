@@ -3,17 +3,16 @@ require 'yaml'
 module Flask
   
   def self.load(*args)
-    Load.all(*args)
+    Load.config(*args)
   end
   
   # Loads config files.
   class Load
     ROOM_RESERVED_KEYS = %w(exits items)
-    ROOM_DIRECTIONS = %w(north east south west)
     
     @path = 'config/'
     
-    def self.all(path = nil)
+    def self.config(path = nil)
       @path = path if path
       items
       rooms
