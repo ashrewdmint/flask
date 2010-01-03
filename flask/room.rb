@@ -7,7 +7,7 @@ module Flask
       two_way = true if two_way == nil
       
       self.direction   = direction
-      self.destination = destination
+      self.destination = Inflector.get_class_name(destination)
       self.two_way     = two_way
       self.opposite_direction = opposite_direction
     end
@@ -34,7 +34,7 @@ module Flask
       @responders = []
       @parent     = parent if parent.is_a?(Hallway)
       @visited    = false
-      self.name   = Inflector.underscore(self.class)
+      self.name   = self.class
       
       before_setup
       default_responders
@@ -121,7 +121,7 @@ module Flask
       end
       
       if door.two_way and door.opposite_direction and
-        destination_room = Load.get_or_create_class(door.destination, Room)
+        destination_room = Load.room_class(door.destination)
         
         # Safety measure to prevent an infinite loop.
         # We don't want to create this door if it's already there.
