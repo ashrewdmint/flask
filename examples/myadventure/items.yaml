@@ -1,11 +1,4 @@
-Bauble:
-  description: > A shiny, sparkly Bauble. Oh how it glitters!
-  take_message: >
-    You pick up the bauble and place it into your bag.
-    What a treasure it is, indeed!
-  use_message: Baubles are kinda for looks only.
-
-Flashlight:
+FlashlightItem:
   description: A sturdy-looking flashlight.
   take_message: >
     You pick up the flashlight and attempt to turn it on,
@@ -15,7 +8,7 @@ Flashlight:
   check_batteries: >
     You open the battery compartment and look inside. Empty.
 
-Batteries:
+BatteriesItem:
   description: A pair of AA batteries.
   take_message: Batteries acquired.
   use_message: >

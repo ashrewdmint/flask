@@ -1,4 +1,4 @@
-require '../../flask'
+require File.dirname(__FILE__) + '/../../flask'
 
 class MyAdventure < Flask::Adventure
   @config_path = File.dirname(__FILE__) + '/'
@@ -50,6 +50,8 @@ class NameRoom < Flask::Room
     first = parent.first
     
     first.listen '*' do |name|
+      name = name.to_s
+      
       if name.length > 0
         parent.player.name = name.capitalize
         first.pop

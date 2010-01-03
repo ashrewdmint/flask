@@ -35,7 +35,7 @@ module Flask
         end
         
         item_class = get_or_create_class(name, Item)
-        item_class.data = hash        
+        item_class.data = hash
       end
     end
     
@@ -84,7 +84,7 @@ module Flask
         # Add items
         if items = reserved['items']
           items.each do |item|
-            # Do something
+            room_class.add_item(item)
           end
         end
       end

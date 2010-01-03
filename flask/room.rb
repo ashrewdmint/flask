@@ -32,7 +32,6 @@ module Flask
     
     def initialize(parent)
       @responders = []
-      @inventory  = Inventory.new
       @parent     = parent if parent.is_a?(Hallway)
       @visited    = false
       self.name   = Inflector.underscore(self.class)
@@ -62,8 +61,8 @@ module Flask
         exits
       end
       
-      listen('(go )?.+', :go) do |input|
-        direction = input.gsub(/^go\s+/, '')
+      listen('(go )?(.+)', :go) do |matches|
+        direction = matches[2]
       
         if new_room = door_at(direction)
           travel_to(new_room)
@@ -97,38 +96,6 @@ module Flask
     def travel_to(name)
       parent.enter(name)
     end
-  
-    def go(location, room = nil, &block)
-      return unless @parent
-      trigger = "(go( to)? )?#{location}"
-    
-      if room
-        listen trigger do
-          @parent.enter room
-        end
-      elsif block
-        listen trigger do
-          block.call
-        end
-      end
-    end
-  
-    # TODO: Move (get|take) responder to Adventure#last
-    
-    def new_item(item)
-      inventory << item
-      item = inventory[item]
-      name = item.name
-    
-      listen "(get|take) #{name}" do
-        if inventory[name]
-          inventory.give(name, parent.player.inventory)
-          item.take_message
-        else
-          "You already took that."
-        end
-      end
-    end
     
     # Doorways
     
@@ -157,7 +124,7 @@ module Flask
         destination_room = Load.get_or_create_class(door.destination, Room)
         
         # Safety measure to prevent an infinite loop.
-        # We don't want to create this door if it's already there
+        # We don't want to create this door if it's already there.
         unless destination_room.door_at(door.opposite_direction)
           destination_room.new_door(door.opposite_direction, self, false)
         end
@@ -189,6 +156,31 @@ module Flask
       return data[:exits] if data[:exits]
       exits = doors
       exits.collect {|door| door.direction.capitalize }
+    end
+    
+    # Inventory
+    
+    def self.inventory
+      @inventory = Inventory.new unless @inventory
+      @inventory
+    end
+    
+    # Alias for self.inventory
+    
+    def inventory
+      self.class.inventory
+    end
+    
+    # Adds an item to the inventory
+    
+    def self.add_item(name)
+      inventory << name
+    end
+    
+    # Alias for self.add_item
+    
+    def add_item(name)
+      self.class.add_item(name)
     end
   end
   

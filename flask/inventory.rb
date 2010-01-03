@@ -43,9 +43,9 @@ module Flask
     # Turns a name into a class instance and adds it to itself.
     # Or, if an Item instance is supplied, it just adds it.
     
-    def <<(name)
+    def <<(item)
       unless item.is_a?(Item)
-        item = Load.get_class(name).new
+        item = Load.get_class(item).new
       end
       @items << item if item.is_a?(Item)
     end

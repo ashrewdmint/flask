@@ -23,8 +23,10 @@ module Flask
 
     def respond(input)
       input = input.to_s.strip
-      if @trigger =~ input
-        unless (response = @block.call(input)) == :pass_through
+      matches = input.match(@trigger)
+      
+      if matches = input.match(@trigger)
+        unless (response = @block.call(matches)) == :pass_through
           puts response if response.is_a?(String)
           return true
         end

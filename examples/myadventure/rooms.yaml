@@ -19,7 +19,7 @@ HelpRoom:
 
 WelcomeRoom:
   description: >
-    Welcome to the the game! You can type HELP, INFO, INVENTORY, or QUIT.
+    Welcome to the the game! You can type HELP, INVENTORY, or QUIT.
     Commands are not case-sensitive.
 
 NameRoom:
@@ -35,7 +35,7 @@ StartRoom:
     a few furnishings: a chair and desk, a bed, a dresser,
     and a closed window.
   items:
-    - flashlight
+    - FlashlightItem
   exits:
     south: StartHallwayRoom
     trap_door: { two_way: false, room: BasementRoom }

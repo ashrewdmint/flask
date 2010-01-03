@@ -33,12 +33,23 @@ module Flask
         "I don't know how to respond to '#{input}'"
       end
       
-      last.listen 'go .*' do
+      last.listen('go .*', :go) do
         "You can't go there."
       end
       
-      last.listen '(take|get) .*' do
+      last.listen'(take|get) .*' do
         "You can't take that."
+      end
+      
+      last.listen "(get|take) (.*)" do |matches|
+        name = matches[2]
+        
+        if item = current_room.inventory[name]
+          current_room.inventory.give(name, player.inventory)
+          item.take_message
+        else
+          :pass_through
+        end
       end
     end
     
