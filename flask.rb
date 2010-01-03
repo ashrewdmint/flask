@@ -1,10 +1,7 @@
 # Load all flask files, in the correct order
 
-require 'flask/modules'
-require 'flask/responder'
-require 'flask/inventory'
-require 'flask/room'
-require 'flask/hallway'
-require 'flask/player'
-require 'flask/load'
-require 'flask/adventure'
+files = %w(modules modules responder inventory room hallway player adventure)
+
+files.each do |file|
+  require File.dirname(__FILE__) + '/flask/' + file
+end
