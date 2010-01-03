@@ -1,11 +1,22 @@
 module Flask
 
   class Door
-    attr_accessor :direction, :destination
+    attr_accessor :direction, :destination, :two_way, :opposite_direction
     
-    def initialize(dir, dest)
-      direction = dir
-      destination = dest
+    def initialize(direction, destination, two_way = true, opposite_direction = nil)
+      self.direction   = direction
+      self.destination = destination
+      self.two_way     = two_way
+      self.opposite_direction = opposite_direction
+    end
+    
+    def opposite_direction
+      @opposite_direction || self.class.reverse_direction(direction)
+    end
+    
+    def self.reverse_direction(direction)
+      directions = {'north' => 'south', 'west' => 'east'}
+      directions[direction] || directions.invert[direction]
     end
   end
   
@@ -105,30 +116,47 @@ module Flask
     
     # Doorways
     
-    def self.doorways
-      @doorways = [] unless @doorways
-      @doorways
+    def self.doors
+      @doors = [] unless @doors
+      @doors
     end
     
-    def doorways
-      self.class.doorways
+    # Alias for self.doors
+    
+    def doors
+      self.class.doors
     end
 
-    def self.new_door(dir, dest)
-      return if door_at(dir)
-      doorways << Door.new(dir, dest)
+    # Accepts the same arguments as Room.new:
+    # direction, destination, two_way, opposite_direction
+
+    def self.new_door(*args)
+      door = Door.new(*args)
+      
+      unless door_at(door.direction)
+        doors << door
+      end
+      
+      if door.two_way and door.opposite_direction
+        destination_room = Load.find_or_create_class(door.destination, Room)
+        destination_room.new_door(door.opposite_direction, self, false)
+      end
     end
+    
+    # Alias for self.new_door
     
     def new_door(*args)
       self.class.new_door(*args)
     end
 
     def self.door_at(direction)
-      doorways.each do |door|
+      doors.each do |door|
         return door.destination if door.direction == direction
       end
       false
     end
+    
+    # Alias for self.door_at
     
     def door_at(*args)
       self.class.door_at(*args)

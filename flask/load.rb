@@ -59,20 +59,25 @@ module Flask
         # Add exits
         if exits = reserved['exits']
           exits.each_pair do |direction, details|
+            two_way = true
+            opposite_direction = nil
+            
             if details.is_a?(String)
-              destination_room = details
-              two_way = true
+              destination_room  = details
             else
-              destination_room = details['room']
-              two_way = details['two_way']
+              destination_room   = details['room']
+              two_way            = details['two_way']
+              opposite_direction = details['opposite_direction']
             end
             
             return unless destination_room
-            room_class.new_door(direction, destination_room)
+            room_class.new_door(direction, destination_room, two_way, opposite_direction)
           end
         end
       end
     end
+    
+  public
     
     # Find a class, or create it if it does not exist
     def self.find_or_create_class(name, superclass = nil)
