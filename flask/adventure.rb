@@ -86,7 +86,7 @@ module Flask
   private
     
     def load_config
-      Flask.load(self.class.config_path)
+      Flask.load(self.class, self.class.config_path)
     end
   end
   

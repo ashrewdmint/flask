@@ -10,7 +10,7 @@ module Flask
     end
 
     def <<(name)
-      room = Load.get_class(name).new(self)
+      room = Load.room_class(name).new(self)
       @rooms << room if room.is_a?(Room)
     end
 

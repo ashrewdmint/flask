@@ -2,8 +2,9 @@ require 'yaml'
 
 module Flask
   
-  def self.load(*args)
-    Load.config(*args)
+  def self.load(const, path)
+    Load.context = const
+    Load.config(path)
   end
   
   # Loads config files.
@@ -16,6 +17,31 @@ module Flask
       @path = path if path
       items
       rooms
+    end
+    
+    # Set the constant to load from.
+    
+    def self.context=(const)
+      @context = const
+    end
+    
+    # Find the constant to load from. Defaults to object.
+    # TODO: Add error message
+    
+    def self.context(mod = nil)
+      if @context
+        context = Object.const_get(Inflector.camelize(@context))
+        if mod
+          mod = Inflector.camelize(mod)
+          unless context.const_defined?(mod)
+            context.const_set(mod, Module.new {})
+          end
+          context = context.const_get(mod)
+        end
+        context
+      else
+        Object
+      end
     end
     
   private
@@ -33,7 +59,7 @@ module Flask
           hash[sym] = value
         end
         
-        item_class = get_or_create_class(name, Item)
+        item_class = get_or_create_class(name, Item, 'Items')
         item_class.data = hash
       end
     end
@@ -56,7 +82,7 @@ module Flask
         end
         
         # If the room class does not exist, create it
-        room_class = get_or_create_class(name, Room)
+        room_class = get_or_create_class(name, Room, 'Rooms')
         
         # Set data
         room_class.data = data
@@ -91,27 +117,29 @@ module Flask
     
   public
   
-    # TODO: This should load stuff in the context of the extended Adventure class.
-    #
     # Find a class, or create it if it does not exist
     
-    def self.get_or_create_class(name, superclass = nil)
+    def self.get_or_create_class(name, superclass = nil, mod = nil)
       name = Inflector.camelize(name)
-      unless Object.const_defined?(name.to_sym)
+      
+      unless context(mod).const_defined?(name.to_sym)
         room_class = if superclass
           Class.new(superclass) {}
         else
           Class.new {}
         end
-        Object.const_set(name, room_class)
+        context(mod).const_set(name, room_class)
       else
-        Object.const_get(name)
+        context(mod).const_get(name)
       end
     end
     
-    def self.get_class(name)
-      name = Inflector.camelize(name).to_sym
-      Object.const_get(name.to_sym)
+    def self.room_class(name)
+      context('Rooms').const_get(Inflector.camelize(name))
+    end
+    
+    def self.item_class(name)
+      context('Items').const_get(Inflector.camelize(name))
     end
   end
   

@@ -31,38 +31,42 @@ class MyAdventure < Flask::Adventure
   end
 end
 
-class HelpRoom < Flask::Room
-  def enter
-    respond :look
-    travel_to :start_room
+module MyAdventure::Rooms
+  
+  class HelpRoom < Flask::Room
+    def enter
+      respond :look
+      travel_to :start_room
+    end
   end
-end
 
-class WelcomeRoom < Flask::Room
-  def enter
-    respond :look
-    travel_to :name_room
+  class WelcomeRoom < Flask::Room
+    def enter
+      respond :look
+      travel_to :name_room
+    end
   end
-end
 
-class NameRoom < Flask::Room
-  def create_responders
-    first = parent.first
+  class NameRoom < Flask::Room
+    def create_responders
+      first = parent.first
+  
+      first.listen '*' do |name|
+        name = name.to_s
     
-    first.listen '*' do |name|
-      name = name.to_s
+        if name.length > 0
+          parent.player.name = name.capitalize
+          first.pop
       
-      if name.length > 0
-        parent.player.name = name.capitalize
-        first.pop
-        
-        puts data[:success].gsub(/#name/, name)
-        parent.enter :start_room
-      else
-        data[:error]
+          puts data[:success].gsub(/#name/, name)
+          parent.enter :start_room
+        else
+          data[:error]
+        end
       end
     end
   end
+  
 end
 
 adv = MyAdventure.new

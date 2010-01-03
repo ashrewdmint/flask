@@ -45,7 +45,7 @@ module Flask
     
     def <<(item)
       unless item.is_a?(Item)
-        item = Load.get_class(item).new
+        item = Load.item_class(item).new
       end
       @items << item if item.is_a?(Item)
     end
