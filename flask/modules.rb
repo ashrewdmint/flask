@@ -30,13 +30,13 @@ module Flask
   
   module Inflector
     def self.camelize(string)
-      split = string.to_s.split(/_/)
+      split = string.to_s.split(/_|\s+/)
       split.collect! {|word| word.capitalize} if split.length > 1
       split.join
     end
     
     def self.underscore(string)
-      string.to_s.split(/(?=[A-Z0-9])/).join('_').downcase
+      string.to_s.split(/(?=[A-Z0-9])|\s+/).join('_').downcase
     end 
   end
   
