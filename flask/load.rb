@@ -81,6 +81,7 @@ module Flask
     
     # Find a class, or create it if it does not exist
     def self.find_or_create_class(name, superclass = nil)
+      name = Inflector.camelize(name)
       unless Object.const_defined?(name.to_sym)
         room_class = if superclass
           Class.new(superclass) do; end
