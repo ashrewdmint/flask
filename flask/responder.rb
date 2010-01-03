@@ -15,8 +15,8 @@ module Flask
       var
     end
 
-    def initialize(trigger, &block)
-      self.name = trigger
+    def initialize(trigger, name = nil, &block)
+      self.name = name || trigger
       @trigger = Responder.regexify(trigger)
       @block = block
     end
@@ -78,8 +78,8 @@ module Flask
       end
     end
 
-    def listen(trigger = nil, &block)
-      self.<< Responder.new(trigger, &block)
+    def listen(*args, &block)
+      self.<< Responder.new(*args, &block)
     end
 
     def collection(name, &block)
