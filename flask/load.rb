@@ -91,7 +91,9 @@ module Flask
     end
     
   public
-    
+  
+    # TODO: This should load stuff in the context of the extended Adventure class.
+    #
     # Find a class, or create it if it does not exist
     def self.get_or_create_class(name, superclass = nil)
       name = Inflector.camelize(name)
