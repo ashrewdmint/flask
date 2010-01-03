@@ -4,6 +4,8 @@ module Flask
     attr_accessor :direction, :destination, :two_way, :opposite_direction
     
     def initialize(direction, destination, two_way = true, opposite_direction = nil)
+      two_way = true if two_way == nil
+      
       self.direction   = direction
       self.destination = destination
       self.two_way     = two_way
@@ -137,9 +139,14 @@ module Flask
         doors << door
       end
       
-      if door.two_way and door.opposite_direction
+      if door.two_way and door.opposite_direction and
         destination_room = Load.find_or_create_class(door.destination, Room)
-        destination_room.new_door(door.opposite_direction, self, false)
+        
+        # Safety measure to prevent an infinite loop.
+        # We don't want to create this door if it's already there
+        unless destination_room.door_at(door.opposite_direction)
+          destination_room.new_door(door.opposite_direction, self, false)
+        end
       end
     end
     

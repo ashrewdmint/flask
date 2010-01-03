@@ -84,9 +84,9 @@ module Flask
       name = Inflector.camelize(name)
       unless Object.const_defined?(name.to_sym)
         room_class = if superclass
-          Class.new(superclass) do; end
+          Class.new(superclass) {}
         else
-          Class.new do; end
+          Class.new {}
         end
         Object.const_set(name, room_class)
       else
