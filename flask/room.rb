@@ -150,7 +150,7 @@ module Flask
       end
       
       if door.two_way and door.opposite_direction and
-        destination_room = Load.find_or_create_class(door.destination, Room)
+        destination_room = Load.get_or_create_class(door.destination, Room)
         
         # Safety measure to prevent an infinite loop.
         # We don't want to create this door if it's already there

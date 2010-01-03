@@ -51,7 +51,7 @@ module Flask
         end
         
         # If the room class does not exist, create it
-        room_class = find_or_create_class(name, Room)
+        room_class = get_or_create_class(name, Room)
         
         # Set data
         room_class.data = data
@@ -80,7 +80,7 @@ module Flask
   public
     
     # Find a class, or create it if it does not exist
-    def self.find_or_create_class(name, superclass = nil)
+    def self.get_or_create_class(name, superclass = nil)
       name = Inflector.camelize(name)
       unless Object.const_defined?(name.to_sym)
         room_class = if superclass
