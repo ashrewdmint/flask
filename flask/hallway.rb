@@ -1,11 +1,11 @@
 module Flask
 
-  # A Hallway is a group of rooms
+  # A collection of Rooms.
   
   class Hallway
     attr_reader :rooms, :current_room
-
-    def initialize()
+    
+    def initialize
       @rooms = []
     end
 
@@ -14,19 +14,11 @@ module Flask
       @rooms << room if room.is_a?(Room)
     end
 
-    def push(room)
-      self << room
-    end
-
     def [](name)
       @rooms.each do |r|
         return r if r.name_matches? name
       end
       nil
-    end
-
-    def find(name)
-      self[name]
     end
 
     def enter(name)
