@@ -51,6 +51,8 @@ module Flask
     def create_responders; end
     def setup; end
     
+    # TODO: Move :go responder into Adventure#last
+    
     def default_responders
       listen 'look' do
         description
@@ -111,9 +113,11 @@ module Flask
       end
     end
   
-    def new_item(name, description, take_message)
-      inventory << Item.new(name, description, take_message)
-      item = inventory[name]
+    # TODO: Move (get|take) responder to Adventure#last
+    
+    def new_item(item)
+      inventory << item
+      item = inventory[item]
       name = item.name
     
       listen "(get|take) #{name}" do

@@ -56,13 +56,6 @@ module Flask
           end
         end
         
-        # Add items to room
-        if items = reserved['items']
-          items.each do |item|
-            # Do something with the item
-          end
-        end
-        
         # If the room class does not exist, create it
         room_class = get_or_create_class(name, Room)
         
@@ -87,6 +80,13 @@ module Flask
             room_class.new_door(direction, destination_room, two_way, opposite_direction)
           end
         end
+        
+        # Add items
+        if items = reserved['items']
+          items.each do |item|
+            # Do something
+          end
+        end
       end
     end
     
@@ -95,6 +95,7 @@ module Flask
     # TODO: This should load stuff in the context of the extended Adventure class.
     #
     # Find a class, or create it if it does not exist
+    
     def self.get_or_create_class(name, superclass = nil)
       name = Inflector.camelize(name)
       unless Object.const_defined?(name.to_sym)
