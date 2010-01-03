@@ -17,7 +17,7 @@ module Flask
         new_name = new_name.inspect
       end
 
-      @name = new_name.to_s
+      @name = Inflector.underscore(Inflector.get_class_name(new_name.to_s))
     end
     
     # For a name of "bojangles", this will return true for both
@@ -37,7 +37,12 @@ module Flask
     
     def self.underscore(string)
       string.to_s.split(/(?=[A-Z0-9])|\s+/).join('_').downcase
-    end 
+    end
+    
+    # Returns the last constant from a string like Module::Class
+    def self.get_class_name(string)
+      camelize(string).gsub(/.*::(.*)/, '\1')
+    end
   end
   
 end
