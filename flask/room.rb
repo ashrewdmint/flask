@@ -1,14 +1,26 @@
 module Flask
+
+  class Door
+    attr_accessor :direction, :destination
+    
+    def initialize(dir, dest)
+      direction = dir
+      destination = dest
+    end
+  end
   
   class Room < ResponderCollection
-    attr_reader :parent, :data, :inventory
+    attr_reader :parent, :inventory
+    
+    # Data class instance variable
     class << self; attr_accessor :data end
-  
+    def self.data; @data || {} end
+    def data; self.class.data end
+    
     def initialize(parent)
       @responders = []
       @inventory  = Inventory.new
       @parent     = parent if parent.is_a?(Hallway)
-      @data       = self.class.data || {}
       @visited    = false
       self.name   = Nameable.to_underscore_case(self.class)
       
@@ -89,6 +101,37 @@ module Flask
           "You already took that."
         end
       end
+    end
+    
+    # Doorways
+    
+    def self.doorways
+      @doorways = [] unless @doorways
+      @doorways
+    end
+    
+    def doorways
+      self.class.doorways
+    end
+
+    def self.new_door(dir, dest)
+      return if door_at(dir)
+      doorways << Door.new(dir, dest)
+    end
+    
+    def new_door(*args)
+      self.new_door(*args)
+    end
+
+    def self.door_at(direction)
+      doorways.each do |door|
+        return door.destination if door.direction == direction
+      end
+      false
+    end
+    
+    def door_at(*args)
+      self.door_at(*args)
     end
   end
   
