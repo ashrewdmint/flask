@@ -29,11 +29,14 @@ Name:
     
 Start:
   intro: You awake slowly...
-  description: You can't see much here. It's pitch black.
+  description: >
+    You can't see much here. It's pitch black. Stumbling across the room,
+    you trip over an OBJECT.
   description_with_flashlight: >
-    You are in a small bedroom. With your flashlight, you can discern
-    a few furnishings: a chair and desk, a bed, a dresser,
-    and a closed window.
+    You are in a small, unfirnished room. There is a door to the south.
+  search_for_object: |
+    You feel the floor for whatever you tripped over...
+    You found it. It's a flashlight.
   items:
     - Flashlight
   exits:

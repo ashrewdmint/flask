@@ -67,6 +67,15 @@ module MyAdventure::Rooms
     end
   end
   
+  class Start < Flask::Room
+    def create_responders
+      listen '(take|get) object' do
+        puts data[:search_for_object]
+        parent.respond 'get flashlight'
+      end
+    end
+  end
+  
 end
 
 adv = MyAdventure.new
