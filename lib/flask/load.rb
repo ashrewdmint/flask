@@ -10,11 +10,10 @@ module Flask
   # Loads config files.
   class Load
     ROOM_RESERVED_KEYS = %w(exits items)
-    @path = 'config/'
     
     def self.config(constant, path = nil)
       @constant = constant
-      @path = path if path
+      @path = path || 'config/'
       items
       rooms
     end
