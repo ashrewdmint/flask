@@ -5,7 +5,10 @@ module Flask
   class Responder
     attr_reader :name, :trigger, :block
     include Nameable
-
+    
+    # Takes a string and turns it into a case-insensitive regex.
+    # If a regex is supplied, it will be returned unchanged.
+    
     def self.regexify(var)
       unless var.is_a?(Regexp)
         var = '.*' if var == '*'
@@ -14,12 +17,18 @@ module Flask
       end
       var
     end
+    
+    # Trigger can be a string or a regex. Name is an optional string
+    # or symbol which you can use to refer to this responder once it
+    # has been added to a ResponderCollection.
 
     def initialize(trigger, name = nil, &block)
       self.name = name || trigger
-      @trigger = Responder.regexify(trigger)
+      @trigger = self.class.regexify(trigger)
       @block = block
     end
+    
+    # If input matches the trigger, it will run the block of code.
 
     def respond(input)
       input = input.to_s.strip
