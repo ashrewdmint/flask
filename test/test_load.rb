@@ -22,6 +22,16 @@ class LoadTest < Test::Unit::TestCase
     assert error_raised
   end
   
+  should "throw LoadError when empty class name is supplied in get_or_create_class" do
+    error_raised = false
+    begin
+      Flask::Load.get_or_create_class('')
+    rescue Flask::LoadError
+      error_raised = true
+    end
+    assert error_raised
+  end
+  
   should "load classes inside an extended Adventure class" do
     TestAdventure.new
     assert TestAdventure::Rooms::Test

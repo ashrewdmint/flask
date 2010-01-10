@@ -118,15 +118,19 @@ module Flask
     def self.get_or_create_class(name, superclass = nil, mod = nil)
       name = Inflector.camelize(name)
       
-      unless constant(mod).const_defined?(name)
-        room_class = if superclass
-          Class.new(superclass) {}
+      begin
+        unless constant(mod).const_defined?(name)
+          room_class = if superclass
+            Class.new(superclass) {}
+          else
+            Class.new {}
+          end
+          constant(mod).const_set(name, room_class)
         else
-          Class.new {}
+          constant(mod).const_get(name)
         end
-        constant(mod).const_set(name, room_class)
-      else
-        constant(mod).const_get(name)
+      rescue ArgumentError
+        raise LoadError, 'class name must not be empty'
       end
     end
     
