@@ -70,5 +70,32 @@ class ResponderTest < Test::Unit::TestCase
       assert ! @collection[:yet_another_thing]
       assert ! @collection['something else']
     end
+    
+    should "remove the most recent Responder or ResponderCollection" do
+      length = @collection.responders.length
+      @collection.pop
+      assert @collection.responders.length == length - 1
+    end
+    
+    should "get a response from newest to oldest" do
+      response = nil
+      
+      @collection.listen('*') { response = 2 }
+      @collection.listen('*') { response = 1 }
+      @collection.respond 'anything'
+      
+      assert response == 1
+    end
+    
+    should "continue finding responses if a responder returns :pass_through" do
+      responses = []
+      
+      @collection.listen('*') { responses << 3; :pass_through }
+      @collection.listen('*') { responses << 2; :pass_through }
+      @collection.listen('*') { responses << 1; :pass_through }
+      @collection.respond 'anything'
+      
+      assert responses == [1, 2, 3]
+    end
   end
 end
