@@ -46,7 +46,7 @@ module Flask
     # Loads Item classes as defined in items.yaml
     
     def self.items
-      items = YAML.load_file("#{@path}items.yaml")
+      return unless items = YAML.load_file("#{@path}items.yaml")
       items.each_pair do |name, hash|
         
         # Turn string names into lowercase symbols
@@ -64,7 +64,7 @@ module Flask
     # Loads Room classes as defined in rooms.yaml
     
     def self.rooms
-      items = YAML.load_file("#{@path}rooms.yaml")
+      return unless items = YAML.load_file("#{@path}rooms.yaml")
       items.each_pair do |name, hash|
         data = {}
         reserved = {}
