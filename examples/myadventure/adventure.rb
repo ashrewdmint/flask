@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../../flask'
+require File.dirname(__FILE__) + '/../../lib/flask'
 
 class MyAdventure < Flask::Adventure
   @config_path = File.dirname(__FILE__) + '/'
