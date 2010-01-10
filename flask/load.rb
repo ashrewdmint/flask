@@ -10,41 +10,38 @@ module Flask
   # Loads config files.
   class Load
     ROOM_RESERVED_KEYS = %w(exits items)
-    
     @path = 'config/'
     
-    def self.config(path = nil)
+    def self.config(constant, path = nil)
+      @constant = constant
       @path = path if path
       items
       rooms
     end
     
-    # Set the constant to load from.
+  private  
     
-    def self.context=(const)
-      @context = const
-    end
+    # Return the right constant in order to load something. The optional
+    # second argument allows you to specify a module (like :rooms), which
+    # would cause the classes to be loaded into SomeConstant::Rooms.
+    #
+    # If the module doesn't exist, it will be created for you.
     
-    # Find the constant to load from. Defaults to object.
-    # TODO: Add error message
-    
-    def self.context(mod = nil)
-      if @context
-        context = Object.const_get(Inflector.camelize(@context))
-        if mod
+    def self.constant(mod = nil)
+      constant = @constant
+      if mod
+        begin
           mod = Inflector.camelize(mod)
-          unless context.const_defined?(mod)
-            context.const_set(mod, Module.new {})
+          unless constant.const_defined?(mod)
+            constant.const_set(mod, Module.new {})
           end
-          context = context.const_get(mod)
+          constant.const_get(mod)
+        rescue
+          raise LoadError, 'no constant supplied'
         end
-        context
-      else
-        Object
       end
+      constant
     end
-    
-  private
     
     # Loads Item classes as defined in items.yaml
     
@@ -117,29 +114,33 @@ module Flask
     
   public
   
-    # Find a class, or create it if it does not exist
+    # Get a class, or create it if it does not exist
     
     def self.get_or_create_class(name, superclass = nil, mod = nil)
       name = Inflector.camelize(name)
       
-      unless context(mod).const_defined?(name)
+      unless constant(mod).const_defined?(name)
         room_class = if superclass
           Class.new(superclass) {}
         else
           Class.new {}
         end
-        context(mod).const_set(name, room_class)
+        constant(mod).const_set(name, room_class)
       else
-        context(mod).const_get(name)
+        constant(mod).const_get(name)
       end
     end
     
+    # Get or create a Room class
+    
     def self.room_class(name)
-      get_or_create_class(name, Room, 'Rooms')
+      get_or_create_class(name, Room, :rooms)
     end
     
+    # Get or create an Item class
+    
     def self.item_class(name)
-      get_or_create_class(name, Item, 'Items')
+      get_or_create_class(name, Item, :items)
     end
   end
   

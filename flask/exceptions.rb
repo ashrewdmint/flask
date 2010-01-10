@@ -1,9 +1,6 @@
 module Flask
   
-  class Exception < RuntimeError
-    def message(default = nil)
-      self.class::ErrorMessage
-    end
-  end
+  class Exception < RuntimeError;end
+  class LoadError < Exception; end
   
 end

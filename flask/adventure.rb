@@ -1,3 +1,4 @@
+
 module Flask
   
   # Extend Flask::Adventure to create your own game!
@@ -15,7 +16,7 @@ module Flask
       @player = Player.new
       @in_progress = true
       
-      load_config
+      load
       default_responders
       create_responders
       setup
@@ -85,8 +86,8 @@ module Flask
     
   private
     
-    def load_config
-      Flask.load(self.class, self.class.config_path)
+    def load
+      Load.config(self.class, self.class.config_path)
     end
   end
   
