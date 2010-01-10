@@ -7,9 +7,13 @@ module Flask
       two_way = true if two_way == nil
       
       self.direction   = direction
-      self.destination = Inflector.get_class_name(destination)
+      self.destination = destination
       self.two_way     = two_way
       self.opposite_direction = opposite_direction
+    end
+    
+    def destination=(destination)
+      @destination = Inflector.get_class_name(destination)
     end
     
     def opposite_direction
