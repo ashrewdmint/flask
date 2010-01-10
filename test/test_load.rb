@@ -1,6 +1,6 @@
 require 'helper'
 
-class LoadTest < Test::Unit::TestCase
+class LoadTest < Test::Unit::TestCase    
   should "throw LoadError when no constant is supplied" do
     error_raised = false
     
@@ -11,5 +11,10 @@ class LoadTest < Test::Unit::TestCase
     end
     
     assert error_raised
+  end
+  
+  should "load classes inside the programmer's extended Adventure class" do
+    TestAdventure.new
+    assert TestAdventure::Rooms::Test
   end
 end

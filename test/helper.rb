@@ -6,5 +6,5 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'flask'
 
-class Test::Unit::TestCase
-end
+class TestAdventure < Flask::Adventure; end
+class Test::Unit::TestCase; end

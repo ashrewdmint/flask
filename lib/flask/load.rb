@@ -35,7 +35,7 @@ module Flask
           unless constant.const_defined?(mod)
             constant.const_set(mod, Module.new {})
           end
-          constant.const_get(mod)
+          constant = constant.const_get(mod)
         rescue
           raise LoadError, 'no constant supplied'
         end
