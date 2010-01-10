@@ -29,17 +29,23 @@ module Flask
   end
   
   module Inflector
+    
+    # Converts to camel case
+    
     def self.camelize(string)
       split = string.to_s.split(/_|\s+/)
       split.collect! {|word| word.capitalize} if split.length > 1
       string = split.join.gsub(/^./) {|first| first.capitalize }
     end
     
+    # Converts to underscore case
+    
     def self.underscore(string)
       string.to_s.split(/(?=[A-Z0-9])|\s+/).join('_').downcase
     end
     
     # Returns the last constant from a string like Module::Class
+    
     def self.get_class_name(string)
       camelize(string).gsub(/.*::(.*)/, '\1')
     end
