@@ -22,8 +22,23 @@ class LoadTest < Test::Unit::TestCase
     assert error_raised
   end
   
-  should "load classes inside the programmer's extended Adventure class" do
+  should "load classes inside an extended Adventure class" do
     TestAdventure.new
     assert TestAdventure::Rooms::Test
+  end
+  
+  should "extend already loaded classes" do
+    room = Class.new(Flask::Room) do
+      def self.hello
+        true
+      end
+    end
+    
+    TestAdventure.const_set('Rooms', Module.new {})
+    TestAdventure::Rooms.const_set('Test', room)
+    TestAdventure.new
+    
+    assert TestAdventure::Rooms::Test.hello
+    assert TestAdventure::Rooms::Test.data.length > 0
   end
 end
