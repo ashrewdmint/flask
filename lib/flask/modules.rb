@@ -24,7 +24,7 @@ module Flask
     # :bojangles and "bojangles".
     
     def name_matches?(string)
-      @name.downcase == string.to_s.downcase
+      @name.downcase == Inflector.underscore(string.to_s.downcase)
     end
   end
   
