@@ -13,7 +13,7 @@ module Flask
     end
     
     def destination=(destination)
-      @destination = Inflector.get_class_name(destination)
+      @destination = Inflector.underscore(Inflector.get_class_name(destination)).to_sym
     end
     
     def opposite_direction
