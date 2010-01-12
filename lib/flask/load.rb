@@ -81,7 +81,7 @@ module Flask
         room_class = room_class(name)
         
         # Set data
-        room_class.data = data
+        room_class.set_data(data)
         
         # Add exits
         if exits = reserved['exits']

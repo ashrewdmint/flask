@@ -29,11 +29,6 @@ module Flask
   class Room < ResponderCollection
     attr_reader :parent, :inventory
     
-    # Data class instance variable
-    class << self; attr_accessor :data end
-    def self.data; @data || {} end
-    def data; self.class.data end
-    
     def initialize(parent)
       @responders = []
       @parent     = parent if parent.is_a?(Hallway)
@@ -45,6 +40,15 @@ module Flask
       create_items
       create_responders
       setup
+    end
+    
+    def self.set_data(hash)
+      @data = hash if hash.is_a?(Hash)
+    end
+    
+    def data
+      @data = self.class.instance_variable_get(:@data) unless @data
+      @data
     end
     
   private
