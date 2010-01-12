@@ -28,6 +28,12 @@ class MyAdventure < Flask::Adventure
     first.listen 'help' do
       enter :help
     end
+    
+    first.listen 'inv(entory)?' do
+      unless player.inventory.show
+        puts "You got nothin'"
+      end
+    end
   end
 end
 
