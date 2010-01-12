@@ -70,8 +70,29 @@ module MyAdventure::Rooms
   class Start < Flask::Room
     def create_responders
       listen '(take|get) object' do
-        puts data[:search_for_object]
-        parent.respond 'get flashlight'
+        unless parent.player.inventory[:flashlight]
+          puts data[:search_for_object]
+          parent.respond 'get flashlight'
+          parent.respond 'look'
+        else
+          :pass_through
+        end
+      end
+      
+      listen '(go )?south|go .*' do
+        unless parent.player.inventory[:flashlight]
+          data[:travel_without_flashlight]
+        else
+          :pass_through
+        end
+      end
+    end
+    
+    def description
+      if parent.player.inventory[:flashlight]
+        data[:description_with_flashlight]
+      else
+        data[:description]
       end
     end
   end
