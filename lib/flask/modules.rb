@@ -1,6 +1,19 @@
 module Flask
   
-  # Gives things a name which can be referenced as a string or a symbol
+  # Has the ability to store a hash in a Class. All instances of
+  # the class automatically have the hash. Subclasses will not.
+    
+  module ShareableData
+    self.class.send(:define_method, 'set_data') do |hash|
+      @data = hash if hash.is_a?(Hash)
+    end
+    
+    def data
+      @data || self.class.instance_variable_get(:@data) || {}
+    end
+  end
+  
+  # Has a name which can be referenced as a string or a symbol
   
   module Nameable
     def name

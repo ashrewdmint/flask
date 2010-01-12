@@ -55,8 +55,7 @@ module Flask
           hash[sym] = value
         end
         
-        item_class = item_class(name)
-        item_class.data = hash
+        item_class(name).set_data(hash)
       end
     end
     

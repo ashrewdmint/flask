@@ -5,6 +5,7 @@ module Flask
   
   class Item
     include Nameable
+    include ShareableData
     
     def initialize
       self.name = self.class
@@ -16,18 +17,6 @@ module Flask
     
     def take_message
       data[:take_message]
-    end
-    
-    def data
-      self.class.data
-    end
-    
-    def self.data
-      @data || {}
-    end
-    
-    def self.data=(hash)
-      @data = hash if hash.is_a?(Hash)
     end
   end
   
